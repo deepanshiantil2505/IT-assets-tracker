@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  AGENT
+  EMPLOYEE
+}
+
+enum AssetStatus {
+  IN_USE
+  IN_STORAGE
+  IN_REPAIR
+  RETIRED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+model User {
+  id             Int       @id @default(autoincrement())
+  name           String
+  email          String    @unique
+  passwordHash   String
+  role           Role      @default(EMPLOYEE)
+  department     String?
+  createdAt      DateTime  @default(now())
+
+  assetsOwned    Asset[]   @relation("AssetOwner")
+  ticketsRaised  Ticket[]  @relation("TicketRequester")
+  ticketsAssigned Ticket[] @relation("TicketAssignee")
+  comments       Comment[]
+}
+
+model Asset {
+  id           Int         @id @default(autoincrement())
+  assetTag     String      @unique
+  name         String
+  category     String
+  serialNumber String?
+  status       AssetStatus @default(IN_STORAGE)
+  purchaseDate DateTime?
+  ownerId      Int?
+  owner        User?       @relation("AssetOwner", fields: [ownerId], references: [id])
+  tickets      Ticket[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Ticket {
+  id            Int            @id @default(autoincrement())
+  title         String
+  description   String
+  status        TicketStatus   @default(OPEN)
+  priority      TicketPriority @default(MEDIUM)
+  requesterId   Int
+  requester     User           @relation("TicketRequester", fields: [requesterId], references: [id])
+  assigneeId    Int?
+  assignee      User?          @relation("TicketAssignee", fields: [assigneeId], references: [id])
+  assetId       Int?
+  asset         Asset?         @relation(fields: [assetId], references: [id])
+  comments      Comment[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  resolvedAt    DateTime?
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  body      String
+  ticketId  Int
+  ticket    Ticket   @relation(fields: [ticketId], references: [id])
+  authorId  Int
+  author    User     @relation(fields: [authorId], references: [id])
+  createdAt DateTime @default(now())
+}
