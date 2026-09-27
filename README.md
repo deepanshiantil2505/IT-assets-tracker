@@ -104,14 +104,3 @@ when trying to change a ticket's status directly).
 - SLA countdown per priority level, surfaced on the dashboard
 - Deploy: backend on Render/Railway, frontend on Vercel, Postgres instead of SQLite
 
-## Using this for your resume
-
-A possible bullet point:
-
-> Built a full-stack IT service desk (React/TypeScript, Node/Express, Prisma) with
-> role-based access control, a ticket workflow engine, and an analytics dashboard;
-> wrote API integration tests to verify permission boundaries.
-
-Before you submit it anywhere: run it yourself end to end, tweak the UI copy/colors so it
-feels like *your* project, and be ready to talk through a decision you'd make differently
-next time (interviewers ask this a lot) — the "What I'd add next" section above is a start.
