@@ -97,10 +97,3 @@ npm test
 Covers registration/login flows and confirms RBAC is enforced (e.g. an employee gets a 403
 when trying to change a ticket's status directly).
 
-## What I'd add next
-
-- Email notifications on ticket status changes (e.g. via SendGrid)
-- Optimistic UI updates and pagination controls on the tickets/assets tables
-- SLA countdown per priority level, surfaced on the dashboard
-- Deploy: backend on Render/Railway, frontend on Vercel, Postgres instead of SQLite
-
